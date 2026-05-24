@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"slices"
 	"strings"
 )
@@ -22,8 +23,7 @@ func main() {
 
 		command, err := reader.ReadString('\n')
 		if err != nil {
-			fmt.Fprintln(os.Stderr, "Error reading input: ", err)
-			os.Exit(1)
+			error_handler("Error reading input: ", err)
 		}
 
 		cmd := strings.Fields(command)[0]
@@ -49,12 +49,24 @@ func echo_command(command string) {
 	}
 }
 
+func error_handler(msg string, err error) {
+	fmt.Fprintln(os.Stderr, msg, err)
+	os.Exit(1)
+}
+
 func type_command(command string) {
 	cmd := strings.TrimSpace(command[5:])
 
 	if slices.Contains(builtin_commands, cmd) {
 		fmt.Println(cmd + " is a shell builtin")
-	} else {
-		fmt.Println(cmd + ": not found")
+		return
 	}
+
+	path, err := exec.LookPath(cmd)
+	if err != nil {
+		fmt.Println(cmd + ": not found")
+		return
+	}
+
+	fmt.Println(cmd, "is", path)
 }
