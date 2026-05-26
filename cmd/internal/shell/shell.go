@@ -4,7 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/user"
 	"strings"
+	"time"
 
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/commands"
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/process"
@@ -22,13 +24,15 @@ func New() *Shell {
 
 func (s *Shell) Run() {
 	reader := bufio.NewReader(os.Stdin)
-	home, err := os.UserHomeDir()
+	u, err := user.Current()
+	now := time.Now()
+
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
 
 	for {
-		fmt.Print(home + " $ ")
+		fmt.Print("🐶 [" + now.Format("15:04:05") + "] " + u.Username + " $ ")
 
 		input, err := reader.ReadString('\n')
 		if err != nil {

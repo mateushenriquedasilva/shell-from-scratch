@@ -1,4 +1,4 @@
-package shell
+package main
 
 import "github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/shell"
 
