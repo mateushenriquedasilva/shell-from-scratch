@@ -27,12 +27,20 @@ func main() {
 		}
 
 		cmd := strings.Fields(command)[0]
+
+		if cmd == "exit" {
+			break
+		}
+
 		if fn, exists := commands[cmd]; exists {
 			fn(command)
-		} else if cmd != "exit" {
-			command_not_found(cmd)
 		} else {
-			break
+			path, err := find_program(cmd)
+			if err != nil {
+				command_not_found(cmd)
+			}
+
+			fmt.Println(path)
 		}
 
 		command = strings.TrimSpace(command)
@@ -40,7 +48,7 @@ func main() {
 }
 
 func command_not_found(command string) {
-	fmt.Println(command + ": command not found")
+	fmt.Print(command + ": command not found")
 }
 
 func echo_command(command string) {
@@ -62,11 +70,16 @@ func type_command(command string) {
 		return
 	}
 
-	path, err := exec.LookPath(cmd)
+	path, err := find_program(cmd)
 	if err != nil {
 		fmt.Println(cmd + ": not found")
 		return
 	}
 
 	fmt.Println(cmd, "is", path)
+}
+
+func find_program(program string) (string, error) {
+	path, err := exec.LookPath(program)
+	return path, err
 }
