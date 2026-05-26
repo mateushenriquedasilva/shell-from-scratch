@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/commands"
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/process"
 )
@@ -23,6 +24,8 @@ func New() *Shell {
 }
 
 func (s *Shell) Run() {
+	err := godotenv.Load()
+
 	reader := bufio.NewReader(os.Stdin)
 	u, err := user.Current()
 	now := time.Now()
@@ -30,6 +33,8 @@ func (s *Shell) Run() {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
+
+	fmt.Println(os.Getenv("VERSION"))
 
 	for {
 		fmt.Print("🐶 [" + now.Format("15:04:05") + "] " + u.Username + " $ ")
