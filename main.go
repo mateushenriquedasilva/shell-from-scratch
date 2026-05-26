@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"slices"
 	"strings"
 )
@@ -22,9 +23,7 @@ func main() {
 		fmt.Print("$ ")
 
 		command, err := reader.ReadString('\n')
-		if err != nil {
-			error_handler("Error reading input: ", err)
-		}
+		error_handler("Error reading input: ", err)
 
 		cmd := strings.Fields(command)[0]
 
@@ -39,7 +38,8 @@ func main() {
 			if err != nil {
 				command_not_found(cmd)
 			} else {
-				run_program(path)
+				command = strings.TrimSpace(command)
+				run_program(path, strings.Split(command, " "))
 			}
 		}
 
@@ -58,8 +58,10 @@ func echo_command(command string) {
 }
 
 func error_handler(msg string, err error) {
-	fmt.Fprintln(os.Stderr, msg, err)
-	os.Exit(1)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, msg, err)
+		os.Exit(1)
+	}
 }
 
 func type_command(command string) {
@@ -84,19 +86,19 @@ func find_program(program string) (string, error) {
 	return path, err
 }
 
-func run_program(path string) {
-	cmd := exec.Command(path)
+func run_program(path string, args []string) {
+	err := os.Chdir(filepath.Dir(path))
+	error_handler("Error running the program: ", err)
+
+	cmd := exec.Command(filepath.Base(path), args[1:]...)
+	err = os.Chdir()
 
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 
-	err := cmd.Start()
-
-	if err != nil {
-		error_handler("Error running the program: ", err)
-		os.Exit(1)
-	}
+	err = cmd.Start()
+	error_handler("Error running the program: ", err)
 
 	cmd.Wait()
 }
