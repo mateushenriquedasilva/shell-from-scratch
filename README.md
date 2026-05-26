@@ -1,7 +1,5 @@
 # Shell from scratch
 
-![Shell Preview](demo.gif)
-
 A simple and minimalist shell written in Go.
 
 ## Features
