@@ -3,5 +3,5 @@ package commands
 import "os"
 
 func Exit(command string) {
-	os.Exit(1)
+	os.Exit(0)
 }
