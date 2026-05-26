@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"slices"
 	"strings"
 )
@@ -86,13 +87,16 @@ func find_program(program string) (string, error) {
 }
 
 func run_program(path string, args []string) {
-	cmd := exec.Command(path, args[1:]...)
+	err := os.Chdir(filepath.Dir(path))
+	error_handler("Error running the program: ", err)
+
+	cmd := exec.Command(filepath.Base(path), args[1:]...)
 
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 
-	err := cmd.Start()
+	err = cmd.Start()
 	error_handler("Error running the program: ", err)
 
 	cmd.Wait()
