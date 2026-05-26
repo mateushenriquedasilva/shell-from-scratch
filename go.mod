@@ -1,3 +1,3 @@
-module github.com/mateushenriquedasilva/oris-shell
+module github.com/mateushenriquedasilva/shell-from-scratch
 
 go 1.26.2

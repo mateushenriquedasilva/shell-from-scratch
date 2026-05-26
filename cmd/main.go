@@ -96,8 +96,6 @@ func run_program(path string, args []string) {
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 
-	err = cmd.Start()
+	err = cmd.Run()
 	error_handler("Error running the program: ", err)
-
-	cmd.Wait()
 }
