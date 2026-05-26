@@ -50,16 +50,16 @@ func command_not_found(command string) {
 	fmt.Println(command + ": command not found")
 }
 
-func echo_command(command string) {
-	if strings.HasPrefix(command, "echo ") {
-		fmt.Print(command[5:])
-	}
-}
-
 func error_handler(msg string, err error) {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, msg, err)
 		os.Exit(1)
+	}
+}
+
+func echo_command(command string) {
+	if strings.HasPrefix(command, "echo ") {
+		fmt.Print(command[5:])
 	}
 }
 
