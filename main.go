@@ -38,9 +38,9 @@ func main() {
 			path, err := find_program(cmd)
 			if err != nil {
 				command_not_found(cmd)
+			} else {
+				run_program(path)
 			}
-
-			fmt.Println(path)
 		}
 
 		command = strings.TrimSpace(command)
@@ -48,7 +48,7 @@ func main() {
 }
 
 func command_not_found(command string) {
-	fmt.Print(command + ": command not found")
+	fmt.Println(command + ": command not found")
 }
 
 func echo_command(command string) {
@@ -82,4 +82,21 @@ func type_command(command string) {
 func find_program(program string) (string, error) {
 	path, err := exec.LookPath(program)
 	return path, err
+}
+
+func run_program(path string) {
+	cmd := exec.Command(path)
+
+	cmd.Stdout = os.Stdout
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+
+	err := cmd.Start()
+
+	if err != nil {
+		error_handler("Error running the program: ", err)
+		os.Exit(1)
+	}
+
+	cmd.Wait()
 }
