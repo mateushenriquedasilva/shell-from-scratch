@@ -13,6 +13,7 @@ func Type(command string) {
 
 	if slices.Contains(Builtins, cmd) {
 		fmt.Println(cmd + " is a shell builtin")
+		return
 	}
 
 	path, err := process.FindProgram(cmd)
@@ -21,5 +22,5 @@ func Type(command string) {
 		return
 	}
 
-	fmt.Println(cmd + "is" + path)
+	fmt.Println(cmd + " is " + path)
 }

@@ -7,8 +7,7 @@ import (
 )
 
 func RunProgram(path string, args []string) error {
-	cmd := exec.Command(path, args[1:]...)
-
+	cmd := exec.Command(filepath.Base(path), args[1:]...)
 	cmd.Dir = filepath.Dir(path)
 
 	cmd.Stdout = os.Stdout
