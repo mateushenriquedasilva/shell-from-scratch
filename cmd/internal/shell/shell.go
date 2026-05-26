@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 	"os/user"
+	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/commands"
@@ -28,7 +28,6 @@ func (s *Shell) Run() {
 
 	reader := bufio.NewReader(os.Stdin)
 	u, err := user.Current()
-	now := time.Now()
 
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -37,7 +36,13 @@ func (s *Shell) Run() {
 	fmt.Println(os.Getenv("VERSION"))
 
 	for {
-		fmt.Print("🐶 [" + now.Format("15:04:05") + "] " + u.Username + " $ ")
+		p, err := os.Getwd()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			continue
+		}
+
+		fmt.Print("🐶 " + u.Username + ":" + filepath.Base(p) + " $ ")
 
 		input, err := reader.ReadString('\n')
 		if err != nil {
