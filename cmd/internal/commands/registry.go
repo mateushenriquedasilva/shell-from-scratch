@@ -6,6 +6,7 @@ func Registry() map[string]func(string) {
 		"type": Type,
 		"exit": Exit,
 		"pwd":  Pwd,
+		"cd":   Cd,
 	}
 }
 
@@ -14,4 +15,5 @@ var Builtins = []string{
 	"type",
 	"exit",
 	"pwd",
+	"cd",
 }
