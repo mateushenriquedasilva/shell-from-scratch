@@ -19,5 +19,5 @@ func Ls(command []string) {
 		command = append(command, home)
 	}
 
-	process.RunProgram(command[0], command[1:])
+	process.RunProgram(command[0], command)
 }

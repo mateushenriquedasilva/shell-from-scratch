@@ -4,17 +4,16 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path/filepath"
 )
 
 func RunProgram(name string, args []string) error {
 	path, err := FindProgram(name)
+
 	if err != nil {
-		fmt.Println(name + ": command not found")
+		return fmt.Errorf("%s: command not found", name)
 	}
 
-	cmd := exec.Command(filepath.Base(path), args...)
-	cmd.Dir = filepath.Dir(path)
+	cmd := exec.Command(path, args[1:]...)
 
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin

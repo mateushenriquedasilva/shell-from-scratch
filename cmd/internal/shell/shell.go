@@ -50,13 +50,13 @@ func (s *Shell) Run() {
 		}
 
 		args := utils.Parse(input)
-		cmd := strings.ToLower(args[0])
+		name := strings.ToLower(args[0])
 
-		if fn, exists := s.commands[cmd]; exists {
+		if fn, exists := s.commands[name]; exists {
 			fn(args)
 			continue
 		}
 
-		process.RunProgram(cmd, args)
+		process.RunProgram(name, args)
 	}
 }
