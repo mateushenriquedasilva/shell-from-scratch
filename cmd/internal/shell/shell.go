@@ -11,10 +11,11 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/commands"
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/process"
+	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/utils"
 )
 
 type Shell struct {
-	commands map[string]func(string)
+	commands map[string]func([]string)
 }
 
 func New() *Shell {
@@ -55,11 +56,11 @@ func (s *Shell) Run() {
 			continue
 		}
 
-		args := strings.Fields(input)
+		args := utils.Parse(input)
 		cmd := args[0]
 
 		if fn, exists := s.commands[cmd]; exists {
-			fn(input)
+			fn(args)
 			continue
 		}
 

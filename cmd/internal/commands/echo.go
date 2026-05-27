@@ -1,7 +1,11 @@
 package commands
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
-func Echo(command string) {
-	fmt.Println(command[5:])
+func Echo(command []string) {
+	output := strings.Join(command[1:], " ")
+	fmt.Println(output)
 }
