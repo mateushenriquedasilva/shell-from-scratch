@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/fatih/color"
 	"github.com/joho/godotenv"
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/commands"
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/process"
@@ -43,7 +44,7 @@ func (s *Shell) Run() {
 			continue
 		}
 
-		fmt.Print("🐶 " + u.Username + ":" + filepath.Base(p) + " $ ")
+		fmt.Print("🐶 " + color.CyanString(u.Username) + ":" + color.GreenString(filepath.Base(p)) + " $ ")
 
 		input, err := reader.ReadString('\n')
 		if err != nil {
@@ -58,6 +59,15 @@ func (s *Shell) Run() {
 
 		args := utils.Parse(input)
 		cmd := args[0]
+
+		current, err := os.Getwd()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
+
+		if cmd == "ls" && len(args) <= 1 {
+			args = append(args, current)
+		}
 
 		if fn, exists := s.commands[cmd]; exists {
 			fn(args)

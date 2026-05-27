@@ -7,6 +7,7 @@ func Registry() map[string]func([]string) {
 		"exit": Exit,
 		"pwd":  Pwd,
 		"cd":   Cd,
+		"ls":   Ls,
 	}
 }
 
