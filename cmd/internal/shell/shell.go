@@ -50,7 +50,7 @@ func (s *Shell) Run() {
 		}
 
 		args := utils.Parse(input)
-		cmd := args[0]
+		cmd := strings.ToLower(args[0])
 
 		if fn, exists := s.commands[cmd]; exists {
 			fn(args)
