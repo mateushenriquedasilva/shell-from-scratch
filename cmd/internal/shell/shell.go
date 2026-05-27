@@ -30,26 +30,18 @@ func (s *Shell) Run() {
 
 	reader := bufio.NewReader(os.Stdin)
 	u, err := user.Current()
-
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-	}
+	utils.Error(err)
 
 	fmt.Println(os.Getenv("VERSION"))
 
 	for {
 		p, err := os.Getwd()
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			continue
-		}
+		utils.Error(err)
 
 		fmt.Print("🐶 " + color.CyanString(u.Username) + ":" + color.GreenString(filepath.Base(p)) + " $ ")
 
 		input, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
+		utils.Error(err)
 
 		input = strings.TrimSpace(input)
 
@@ -60,26 +52,11 @@ func (s *Shell) Run() {
 		args := utils.Parse(input)
 		cmd := args[0]
 
-		current, err := os.Getwd()
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
-
-		if cmd == "ls" && len(args) <= 1 {
-			args = append(args, current)
-		}
-
 		if fn, exists := s.commands[cmd]; exists {
 			fn(args)
 			continue
 		}
 
-		path, err := process.FindProgram(cmd)
-		if err != nil {
-			fmt.Println(cmd + ": command not found")
-			continue
-		}
-
-		process.RunProgram(path, args)
+		process.RunProgram(cmd, args)
 	}
 }

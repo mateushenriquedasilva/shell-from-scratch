@@ -3,6 +3,7 @@ module github.com/mateushenriquedasilva/shell-from-scratch
 go 1.26.2
 
 require (
+	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/fatih/color v1.19.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
