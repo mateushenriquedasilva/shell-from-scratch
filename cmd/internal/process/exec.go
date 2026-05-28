@@ -10,7 +10,7 @@ func RunProgram(name string, args []string) {
 	path, err := FindProgram(name)
 
 	if err != nil {
-		fmt.Println(name, ": command not found")
+		fmt.Println(name + ": command not found")
 	}
 
 	cmd := exec.Command(path, args[1:]...)
