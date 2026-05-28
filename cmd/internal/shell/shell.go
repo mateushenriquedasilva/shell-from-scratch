@@ -4,11 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"os/user"
-	"path/filepath"
 	"strings"
 
-	"github.com/fatih/color"
 	"github.com/joho/godotenv"
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/commands"
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/process"
@@ -33,19 +30,11 @@ func (s *Shell) Run() {
 	os.Chdir(home)
 
 	reader := bufio.NewReader(os.Stdin)
-	u, err := user.Current()
-	utils.Error(err)
 
 	fmt.Println(os.Getenv("VERSION"))
 
 	for {
-		p, err := os.Getwd()
-		utils.Error(err)
-
-		branch, err := utils.GetCurrentBranch(".")
-
-		fmt.Print("🐶 " + color.CyanString(u.Username) + ":" + color.GreenString(filepath.Base(p)) + " " + branch + " $ ")
-
+		utils.Prompt()
 		input, err := reader.ReadString('\n')
 		utils.Error(err)
 

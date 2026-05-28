@@ -6,11 +6,11 @@ import (
 	"os/exec"
 )
 
-func RunProgram(name string, args []string) error {
+func RunProgram(name string, args []string) {
 	path, err := FindProgram(name)
 
 	if err != nil {
-		return fmt.Errorf("%s: command not found", name)
+		fmt.Println(name, ": command not found")
 	}
 
 	cmd := exec.Command(path, args[1:]...)
@@ -19,5 +19,5 @@ func RunProgram(name string, args []string) error {
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 
-	return cmd.Run()
+	cmd.Run()
 }
