@@ -28,6 +28,10 @@ func New() *Shell {
 func (s *Shell) Run() {
 	err := godotenv.Load()
 
+	home, err := os.UserHomeDir()
+	utils.Error(err)
+	os.Chdir(home)
+
 	reader := bufio.NewReader(os.Stdin)
 	u, err := user.Current()
 	utils.Error(err)
@@ -38,7 +42,9 @@ func (s *Shell) Run() {
 		p, err := os.Getwd()
 		utils.Error(err)
 
-		fmt.Print("🐶 " + color.CyanString(u.Username) + ":" + color.GreenString(filepath.Base(p)) + " $ ")
+		branch, err := utils.GetCurrentBranch(".")
+
+		fmt.Print("🐶 " + color.CyanString(u.Username) + ":" + color.GreenString(filepath.Base(p)) + " " + branch + " $ ")
 
 		input, err := reader.ReadString('\n')
 		utils.Error(err)
