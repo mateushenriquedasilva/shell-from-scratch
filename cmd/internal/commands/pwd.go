@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/atotto/clipboard"
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/utils"
 )
 
