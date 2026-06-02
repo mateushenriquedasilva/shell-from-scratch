@@ -6,10 +6,24 @@ func Parse(input string) []string {
 
 	inSingleQuotes := false
 	inDoubleQuotes := false
-
+	escaped := false
+	
+	
 	for _, c := range input {
 
+		if escaped {
+			current = append(current, c)
+			escaped = false
+			continue
+		}
+
 		switch c {
+		case '\\':
+			if inSingleQuotes {
+				current = append(current, c)
+			} else {
+				escaped = true
+			}
 		case '\'':
 			if inDoubleQuotes {
 				current = append(current, c)
