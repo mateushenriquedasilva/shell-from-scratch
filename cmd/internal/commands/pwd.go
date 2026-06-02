@@ -10,7 +10,6 @@ import (
 
 func Pwd(command []string) {
 	dir, err := os.Getwd()
-	err = clipboard.WriteAll(dir)
 	utils.Error(err)
 
 	fmt.Println(dir)
