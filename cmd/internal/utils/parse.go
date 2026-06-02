@@ -2,31 +2,39 @@ package utils
 
 func Parse(input string) []string {
 	var args []string
-	var current string
+	var current []rune
 
-	inQuotes := false
+	inSingleQuotes := false
+	inDoubleQuotes := false
 
-	for i := 0; i < len(input); i++ {
-		c := input[i]
+	for _, c := range input {
 
 		switch c {
 		case '\'':
-			inQuotes = !inQuotes
+			if inDoubleQuotes {
+				current = append(current, c)
+			} else {
+				inSingleQuotes = !inSingleQuotes
+			}
+		case '"':
+			if inSingleQuotes {
+				current = append(current, c)
+			} else {
+				inDoubleQuotes = !inDoubleQuotes
+			}
 		case ' ':
-			if inQuotes {
-				current += string(c)
-			} else if current != "" {
-				args = append(args, current)
-				current = ""
+			if inSingleQuotes || inDoubleQuotes {
+				current = append(current, c)
+			} else if len(current) > 0 {
+				args = append(args, string(current))
+				current = []rune{}
 			}
 		default:
-			current += string(c)
+			current = append(current, c)
 		}
 	}
-
-	if current != "" {
-		args = append(args, current)
+	if len(current) > 0 {
+		args = append(args, string(current))
 	}
-
 	return args
 }
