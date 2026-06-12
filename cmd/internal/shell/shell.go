@@ -4,17 +4,16 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"os/user"
-	"path/filepath"
 	"strings"
 
 	"github.com/joho/godotenv"
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/commands"
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/process"
+	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/utils"
 )
 
 type Shell struct {
-	commands map[string]func(string)
+	commands map[string]func([]string)
 }
 
 func New() *Shell {
@@ -26,28 +25,18 @@ func New() *Shell {
 func (s *Shell) Run() {
 	err := godotenv.Load()
 
-	reader := bufio.NewReader(os.Stdin)
-	u, err := user.Current()
+	home, err := os.UserHomeDir()
+	utils.Error(err)
+	os.Chdir(home)
 
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-	}
+	reader := bufio.NewReader(os.Stdin)
 
 	fmt.Println(os.Getenv("VERSION"))
 
 	for {
-		p, err := os.Getwd()
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			continue
-		}
-
-		fmt.Print("🐶 " + u.Username + ":" + filepath.Base(p) + " $ ")
-
+		utils.Prompt()
 		input, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
+		utils.Error(err)
 
 		input = strings.TrimSpace(input)
 
@@ -55,20 +44,14 @@ func (s *Shell) Run() {
 			continue
 		}
 
-		args := strings.Fields(input)
-		cmd := args[0]
+		args := utils.Parse(input)
+		name := strings.ToLower(args[0])
 
-		if fn, exists := s.commands[cmd]; exists {
-			fn(input)
+		if fn, exists := s.commands[name]; exists {
+			fn(args)
 			continue
 		}
 
-		path, err := process.FindProgram(cmd)
-		if err != nil {
-			fmt.Println(cmd + ": command not found")
-			continue
-		}
-
-		process.RunProgram(path, args)
+		process.RunProgram(name, args)
 	}
 }

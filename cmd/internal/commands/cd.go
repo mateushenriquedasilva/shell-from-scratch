@@ -3,12 +3,13 @@ package commands
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/process"
 )
 
-func Cd(command string) {
-	path := command[3:]
+func Cd(command []string) {
+	path := strings.Join(command[1:], "")
 
 	home, err := os.UserHomeDir()
 	if err != nil {
