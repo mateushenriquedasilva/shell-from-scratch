@@ -8,8 +8,8 @@ import (
 	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/process"
 )
 
-func Type(command string) {
-	cmd := strings.TrimSpace(command[5:])
+func Type(command []string) {
+	cmd := strings.Join(command[1:], " ")
 
 	if slices.Contains(Builtins, cmd) {
 		fmt.Println(cmd + " is a shell builtin")

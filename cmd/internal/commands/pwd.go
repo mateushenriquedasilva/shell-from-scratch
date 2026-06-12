@@ -3,13 +3,13 @@ package commands
 import (
 	"fmt"
 	"os"
+
+	"github.com/mateushenriquedasilva/shell-from-scratch/cmd/internal/utils"
 )
 
-func Pwd(command string) {
+func Pwd(command []string) {
 	dir, err := os.Getwd()
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-	}
+	utils.Error(err)
 
 	fmt.Println(dir)
 }
